@@ -1,2 +1,7 @@
 .DS_Store
 arachni-build-dir
+arachni-build-dir_bak
+arachni
+arachni-debug-rack
+arachni-ui-web-experimental.tar.gz
+arachni-ui-web-experimental

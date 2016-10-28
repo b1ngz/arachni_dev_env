@@ -77,7 +77,6 @@ echo "---- Building branch/tag: `branch`"
 arachni_tarball_url=`tarball_url`
 
 
-
 LIB_BASEURL="https://github.com/b1ngz/arachni_dev_env/raw/master/libs/"
 
 
@@ -405,6 +404,8 @@ extract_archive() {
     fi
 
     echo "  * Extracting"
+    echo "tar xvf $archives_path/$1*.tar.gz -C $dir 2>> $logs_path/$1 1>> $logs_path/$1"
+    
     tar xvf $archives_path/$1*.tar.gz -C $dir 2>> $logs_path/$1 1>> $logs_path/$1
     handle_failure $1
 }

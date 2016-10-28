@@ -2,7 +2,7 @@
 #
 # Copyright 2010-2016 Tasos Laskos <tasos.laskos@arachni-scanner.com>
 
-build_script_tarball="https://github.com/Arachni/build-scripts/tarball/master"
+build_script_tarball="https://github.com/b1ngz/arachni_dev_env/raw/master/Arachni-build-scripts-2f36efe.tar.gz"
 
 if [ -z "$ARACHNI_BUILD_DIR" ]; then
     build_dir="arachni-build-dir"
@@ -55,9 +55,9 @@ if [[ $fail ]]; then
     exit 1
 fi
 
-echo
-echo "# Bootstrapping"
-echo '----------------------------------------'
+# echo
+# echo "# Bootstrapping"
+# echo '----------------------------------------'
 
 # echo -n "  * Downloading"
 # echo -n " -  0% ETA:      -s"
@@ -67,28 +67,33 @@ echo '----------------------------------------'
 #         awk '{printf("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b%4s ETA: %6s", $2, $4)}'
 #     done
 
+
+
+
 # echo -e "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b                           "
 
 # echo '  * Extracting'
 # tar xvf $build_scripts_outfile 2>> /dev/null 1>> /dev/null
-# # rm $build_scripts_outfile
+# rm $build_scripts_outfile
 
-# if [[ -z "$1" ]]; then
-#     callback_script=Arachni-build-scripts-*/build.sh
-# else
-#     callback_script=Arachni-build-scripts-*/$1.sh
-# fi
 
-# ls $callback_script 2>> /dev/null 1>> /dev/null
-# if [[ $? != 0 ]]; then
-#     echo
-#     echo "'$1' isn't a valid build-script name."
-#     exit 1
-# fi
+rm -rf Arachni-build-scripts-2f36efe
+cp -R ../Arachni-build-scripts-2f36efe ../arachni-build-dir
 
-cp -R ../Arachni-build-scripts-2f36efe ../$build_dir
 
-callback_script=Arachni-build-scripts-*/build.sh
+if [[ -z "$1" ]]; then
+    callback_script=Arachni-build-scripts-*/build.sh
+else
+    callback_script=Arachni-build-scripts-*/$1.sh
+fi
+
+ls $callback_script 2>> /dev/null 1>> /dev/null
+if [[ $? != 0 ]]; then
+    echo
+    echo "'$1' isn't a valid build-script name."
+    exit 1
+fi
+
 
 echo '  * Starting the build'
 
@@ -96,6 +101,8 @@ echo
 echo '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
 echo
 
+
 bash $callback_script
+
 # rm -rf Arachni-build-scripts-*
 
