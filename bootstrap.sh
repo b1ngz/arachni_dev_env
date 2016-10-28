@@ -59,32 +59,36 @@ echo
 echo "# Bootstrapping"
 echo '----------------------------------------'
 
-echo -n "  * Downloading"
-echo -n " -  0% ETA:      -s"
-wget -c --progress=dot --no-check-certificate $build_script_tarball -O $build_scripts_outfile 2>&1 | \
-    while read line; do
-        echo $line | grep "%" | sed -e "s/\.//g" | \
-        awk '{printf("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b%4s ETA: %6s", $2, $4)}'
-    done
+# echo -n "  * Downloading"
+# echo -n " -  0% ETA:      -s"
+# wget -c --progress=dot --no-check-certificate $build_script_tarball -O $build_scripts_outfile 2>&1 | \
+#     while read line; do
+#         echo $line | grep "%" | sed -e "s/\.//g" | \
+#         awk '{printf("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b%4s ETA: %6s", $2, $4)}'
+#     done
 
-echo -e "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b                           "
+# echo -e "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b                           "
 
-echo '  * Extracting'
-tar xvf $build_scripts_outfile 2>> /dev/null 1>> /dev/null
-# rm $build_scripts_outfile
+# echo '  * Extracting'
+# tar xvf $build_scripts_outfile 2>> /dev/null 1>> /dev/null
+# # rm $build_scripts_outfile
 
-if [[ -z "$1" ]]; then
-    callback_script=Arachni-build-scripts-*/build.sh
-else
-    callback_script=Arachni-build-scripts-*/$1.sh
-fi
+# if [[ -z "$1" ]]; then
+#     callback_script=Arachni-build-scripts-*/build.sh
+# else
+#     callback_script=Arachni-build-scripts-*/$1.sh
+# fi
 
-ls $callback_script 2>> /dev/null 1>> /dev/null
-if [[ $? != 0 ]]; then
-    echo
-    echo "'$1' isn't a valid build-script name."
-    exit 1
-fi
+# ls $callback_script 2>> /dev/null 1>> /dev/null
+# if [[ $? != 0 ]]; then
+#     echo
+#     echo "'$1' isn't a valid build-script name."
+#     exit 1
+# fi
+
+cp -R ../Arachni-build-scripts-2f36efe ../$build_dir
+
+callback_script=Arachni-build-scripts-*/build.sh
 
 echo '  * Starting the build'
 

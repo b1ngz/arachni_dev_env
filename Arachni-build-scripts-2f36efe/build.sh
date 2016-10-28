@@ -76,38 +76,75 @@ echo "---- Building branch/tag: `branch`"
 
 arachni_tarball_url=`tarball_url`
 
-#
+
+
+LIB_BASEURL="https://github.com/b1ngz/arachni_dev_env/raw/master/libs/"
+
+
 # All system library dependencies in proper installation order.
-#
 libs=(
-    http://zlib.net/zlib-1.2.8.tar.gz
+    zlib-1.2.8.tar.gz
     # Stick with the 1.0.1 branch due to:
     #   https://github.com/Arachni/arachni/issues/653
-    http://openssl.org/source/openssl-1.0.1q.tar.gz
-    http://www.sqlite.org/2015/sqlite-autoconf-3090200.tar.gz
+    openssl-1.0.1q.tar.gz
+    sqlite-autoconf-3090200.tar.gz
 )
 
 if [[ "Darwin" != "$(uname)" ]]; then
     libs+=(
-        http://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.0.tar.gz
-        http://www.h5l.org/dist/src/heimdal-1.5.3.tar.gz
+        ncurses-6.0.tar.gz
+        heimdal-1.5.3.tar.gz
     )
 fi
 
 libs+=(
-    http://curl.haxx.se/download/curl-7.46.0.tar.gz
-    http://pyyaml.org/download/libyaml/yaml-0.1.6.tar.gz
-    http://ftp.postgresql.org/pub/source/v9.4.5/postgresql-9.4.5.tar.gz
+    curl-7.46.0.tar.gz
+    yaml-0.1.6.tar.gz
+    postgresql-9.4.5.tar.gz
     # Stick with this version for now:
     #   https://gist.github.com/cclements/d20109ad07c24d004b910ca3ef59d02d
-    http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.3.tar.gz
-    http://downloads.sourceforge.net/project/expat/expat/2.1.0/expat-2.1.0.tar.gz
+    ruby-2.2.3.tar.gz
+    expat-2.1.0.tar.gz
     # Stick with this version to avoid build errors on OSX.
-    http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.gz
+    freetype-2.5.3.tar.gz
     # Stick with this version due to:
     #   https://github.com/Arachni/arachni/issues/648
-    http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.1.tar.gz
+    fontconfig-2.11.1.tar.gz
 )
+
+
+#
+# All system library dependencies in proper installation order.
+#
+# libs=(
+#     http://zlib.net/zlib-1.2.8.tar.gz
+#     # Stick with the 1.0.1 branch due to:
+#     #   https://github.com/Arachni/arachni/issues/653
+#     http://openssl.org/source/openssl-1.0.1q.tar.gz
+#     http://www.sqlite.org/2015/sqlite-autoconf-3090200.tar.gz
+# )
+
+# if [[ "Darwin" != "$(uname)" ]]; then
+#     libs+=(
+#         http://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.0.tar.gz
+#         http://www.h5l.org/dist/src/heimdal-1.5.3.tar.gz
+#     )
+# fi
+
+# libs+=(
+#     http://curl.haxx.se/download/curl-7.46.0.tar.gz
+#     http://pyyaml.org/download/libyaml/yaml-0.1.6.tar.gz
+#     http://ftp.postgresql.org/pub/source/v9.4.5/postgresql-9.4.5.tar.gz
+#     # Stick with this version for now:
+#     #   https://gist.github.com/cclements/d20109ad07c24d004b910ca3ef59d02d
+#     http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.3.tar.gz
+#     http://downloads.sourceforge.net/project/expat/expat/2.1.0/expat-2.1.0.tar.gz
+#     # Stick with this version to avoid build errors on OSX.
+#     http://download.savannah.gnu.org/releases/freetype/freetype-2.5.3.tar.gz
+#     # Stick with this version due to:
+#     #   https://github.com/Arachni/arachni/issues/648
+#     http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.1.tar.gz
+# )
 
 #
 # The script will look for the existence of files whose name begins with the
@@ -351,7 +388,7 @@ download() {
 download_archive() {
     cd $archives_path
 
-    download $1
+    download $LIB_BASEURL$1
     handle_failure $2
 
     cd - > /dev/null
