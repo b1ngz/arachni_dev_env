@@ -188,8 +188,8 @@ if [[ -d $clean_build ]]; then
     echo
     echo "==== Found backed up clean build ($clean_build), using it as base."
 
-    # rm -rf $root
-    # cp -R $clean_build $root
+    rm -rf $root
+    cp -R $clean_build $root
 else
     mkdir -p $root
 fi
@@ -874,11 +874,11 @@ echo '# (6/6) Installing bin wrappers'
 echo '------------------------------------'
 install_bin_wrappers
 
-# echo
-# echo '# Cleaning up'
-# echo '----------------'
-# echo "  * Removing build resources"
-# rm -rf $build_path
+echo
+echo '# Cleaning up'
+echo '----------------'
+echo "  * Removing build resources"
+rm -rf $build_path
 
 if [[ environment == 'development' ]]; then
     echo "  * Removing development headers"
@@ -889,8 +889,8 @@ echo "  * Removing docs"
 rm -rf $usr_path/share/*
 rm -rf $gem_path/doc/*
 
-# echo "  * Clearing GEM cache"
-# rm -rf $gem_path/cache/*
+echo "  * Clearing GEM cache"
+rm -rf $gem_path/cache/*
 
 cp "$scriptdir/templates/README.tpl" "$root/README"
 cp "$scriptdir/templates/LICENSE.tpl" "$root/LICENSE"
