@@ -188,8 +188,8 @@ if [[ -d $clean_build ]]; then
     echo
     echo "==== Found backed up clean build ($clean_build), using it as base."
 
-    rm -rf $root
-    cp -R $clean_build $root
+    # rm -rf $root
+    # cp -R $clean_build $root
 else
     mkdir -p $root
 fi
@@ -370,7 +370,7 @@ handle_failure(){
 download() {
     echo -n "  * Downloading $1"
     echo -n " -  0% ETA:      -s"
-    wget -c --progress=dot --no-check-certificate $1 $2 2>&1 | \
+    proxychains4 wget -c --progress=dot --no-check-certificate $1 $2 2>&1 | \
         while read line; do
             echo $line | grep "%" | sed -e "s/\.//g" | \
             awk '{printf("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b%4s ETA: %6s", $2, $4)}'
@@ -464,7 +464,14 @@ get_name(){
 download_and_install() {
     name=`get_name $1`
 
-    download_archive $1 $name
+    # download_archive $1 $name
+    # cd $archives_path
+    # echo `pwd`
+    if [[ -f "$1" ]]; then
+        rm $1
+    fi
+    # cp ../../../../libs/$1 ./
+    cp "$root/../../libs/$1" $archives_path
     extract_archive $name
     install_from_src $name
     echo
@@ -665,6 +672,12 @@ prepare_ruby() {
     get_ruby_environment > $env_root/environment
     source $env_root/environment
 
+    echo "  * Setting Gem Source"
+
+    $usr_path/bin/gem sources --add http://gems.ruby-china.org/ --remove https://rubygems.org/ 
+
+    $usr_path/bin/gem sources -l
+
     echo "  * Updating Rubygems"
     $usr_path/bin/gem update --system 2>> "$logs_path/rubygems" 1>> "$logs_path/rubygems"
     handle_failure "rubygems"
@@ -678,7 +691,8 @@ prepare_ruby() {
 # Downloads and places the PhantomJS 2.1.1 executable in the package.
 #
 install_phantomjs() {
-    base="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1"
+    # base="https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1"
+    base="phantomjs-2.1.1"
     install_location="$usr_path/bin/phantomjs"
 
     if [[ -e $install_location ]]; then
@@ -702,7 +716,18 @@ install_phantomjs() {
 
     url="$base-$os.$ext"
 
-    download $url "-O $archives_path/phantomjs.$ext"
+    # download $url "-O $archives_path/phantomjs.$ext"
+
+
+    dst_path="$archives_path/phantomjs.$ext"
+
+    if [[ -f "$dst_path" ]]; then
+        rm $dst_path
+    fi
+
+
+    cp "$root/../../phantomjs/$url" $dst_path
+    
 
     if [[ $ext == "zip" ]]; then
         unzip "$archives_path/phantomjs.$ext" -d $src_path 2>> "$logs_path/phantomjs" 1>> "$logs_path/phantomjs"
@@ -729,13 +754,14 @@ install_arachni() {
 
     # The Arachni Web interface archive needs to be stored under $system_path
     # because it needs to be preserved, it is our app after all.
-    rm "$archives_path/arachni-ui-web.tar.gz" &> /dev/null
-    download $arachni_tarball_url "-O $archives_path/arachni-ui-web.tar.gz"
-    handle_failure "arachni-ui-web"
-    extract_archive "arachni-ui-web" $system_path
+    # rm "$archives_path/arachni-ui-web.tar.gz" &> /dev/null
+    # download $arachni_tarball_url "-O $archives_path/arachni-ui-web.tar.gz"
+    # handle_failure "arachni-ui-web"
+    # extract_archive "arachni-ui-web" $system_path
 
     # GitHub may append the git ref or branch to the folder name, strip it.
-    mv $system_path/arachni-ui-web* $system_path/arachni-ui-web
+    # mv $system_path/arachni-ui-web* $system_path/arachni-ui-web
+    cp -R $root/../../arachni-ui-web-experimental $system_path/arachni-ui-web
     cd $system_path/arachni-ui-web
 
     echo "  * Installing"
@@ -848,11 +874,11 @@ echo '# (6/6) Installing bin wrappers'
 echo '------------------------------------'
 install_bin_wrappers
 
-echo
-echo '# Cleaning up'
-echo '----------------'
-echo "  * Removing build resources"
-rm -rf $build_path
+# echo
+# echo '# Cleaning up'
+# echo '----------------'
+# echo "  * Removing build resources"
+# rm -rf $build_path
 
 if [[ environment == 'development' ]]; then
     echo "  * Removing development headers"
@@ -863,15 +889,15 @@ echo "  * Removing docs"
 rm -rf $usr_path/share/*
 rm -rf $gem_path/doc/*
 
-echo "  * Clearing GEM cache"
-rm -rf $gem_path/cache/*
+# echo "  * Clearing GEM cache"
+# rm -rf $gem_path/cache/*
 
 cp "$scriptdir/templates/README.tpl" "$root/README"
 cp "$scriptdir/templates/LICENSE.tpl" "$root/LICENSE"
 cp "$scriptdir/templates/TROUBLESHOOTING.tpl" "$root/TROUBLESHOOTING"
 
 echo "  * Adjusting shebangs"
-if [[ `uname` == "Darwin" ]]; then
+if [[ `uname` == "Darwin" ]]; tdhen
     LC_ALL=C find $env_root/ -type f -exec sed -i '' 's/#!\/.*\/ruby/#!\/usr\/bin\/env ruby/g' {} \;
 else
     find $env_root/ -type f -exec sed -i 's/#!\/.*\/ruby/#!\/usr\/bin\/env ruby/g' {} \;

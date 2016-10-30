@@ -77,8 +77,8 @@ fi
 # rm $build_scripts_outfile
 
 
-rm -rf Arachni-build-scripts-2f36efe
-cp -R ../Arachni-build-scripts-2f36efe ../arachni-build-dir
+rm -rf "$build_dir/Arachni-build-scripts-2f36efe"
+cp -R "$build_dir/../Arachni-build-scripts-2f36efe" $build_dir
 
 
 if [[ -z "$1" ]]; then
