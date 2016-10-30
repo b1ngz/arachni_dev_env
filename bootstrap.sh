@@ -110,5 +110,5 @@ echo
 
 bash $callback_script
 
-# rm -rf Arachni-build-scripts-*
+rm -rf Arachni-build-scripts-*
 

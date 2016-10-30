@@ -188,8 +188,8 @@ if [[ -d $clean_build ]]; then
     echo
     echo "==== Found backed up clean build ($clean_build), using it as base."
 
-    # rm -rf $root
-    # cp -R $clean_build $root
+    rm -rf $root
+    cp -R $clean_build $root
 else
     mkdir -p $root
 fi
@@ -761,8 +761,26 @@ install_arachni() {
 
     # GitHub may append the git ref or branch to the folder name, strip it.
     # mv $system_path/arachni-ui-web* $system_path/arachni-ui-web
+
+    if [[ -d "$system_path/arachni-ui-web" ]]; then
+        rm -rf $system_path/arachni-ui-web
+    fi
+
     cp -R $root/../../arachni-ui-web $system_path/arachni-ui-web
     cd $system_path/arachni-ui-web
+
+    # 因为拉取很慢，所以使用本地github的gem，只设置local
+    bundle config --local local.arachni-debug-rack $root/../../arachni-debug-rack
+
+    bundle config --local local.arachni $root/../../arachni
+
+    bundle config  
+
+    $usr_path/bin/gem sources --add http://gems.ruby-china.org/ --remove https://rubygems.org/ 
+
+    $gem_path/bin/bundle config mirror.https://rubygems.org http://gems.ruby-china.org
+
+    $usr_path/bin/gem sources -l
 
     echo "  * Installing"
 
@@ -874,11 +892,11 @@ echo '# (6/6) Installing bin wrappers'
 echo '------------------------------------'
 install_bin_wrappers
 
-# echo
-# echo '# Cleaning up'
-# echo '----------------'
-# echo "  * Removing build resources"
-# rm -rf $build_path
+echo
+echo '# Cleaning up'
+echo '----------------'
+echo "  * Removing build resources"
+rm -rf $build_path
 
 if [[ environment == 'development' ]]; then
     echo "  * Removing development headers"
@@ -889,8 +907,8 @@ echo "  * Removing docs"
 rm -rf $usr_path/share/*
 rm -rf $gem_path/doc/*
 
-# echo "  * Clearing GEM cache"
-# rm -rf $gem_path/cache/*
+echo "  * Clearing GEM cache"
+rm -rf $gem_path/cache/*
 
 cp "$scriptdir/templates/README.tpl" "$root/README"
 cp "$scriptdir/templates/LICENSE.tpl" "$root/LICENSE"
