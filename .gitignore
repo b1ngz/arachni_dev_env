@@ -1,6 +1,7 @@
 .DS_Store
-arachni-build-dir
 arachni
+arachni-build-dir
 arachni-debug-rack
-arachni-ui-web-experimental.tar.gz
-arachni-ui-web-experimental
+arachni-ui-web
+phantomjs/phantomjs-2.1.1-linux-i686.tar.bz2
+phantomjs/phantomjs-2.1.1-windows.zip

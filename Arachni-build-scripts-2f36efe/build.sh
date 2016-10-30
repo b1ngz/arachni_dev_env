@@ -761,7 +761,7 @@ install_arachni() {
 
     # GitHub may append the git ref or branch to the folder name, strip it.
     # mv $system_path/arachni-ui-web* $system_path/arachni-ui-web
-    cp -R $root/../../arachni-ui-web-experimental $system_path/arachni-ui-web
+    cp -R $root/../../arachni-ui-web $system_path/arachni-ui-web
     cd $system_path/arachni-ui-web
 
     echo "  * Installing"
@@ -897,7 +897,7 @@ cp "$scriptdir/templates/LICENSE.tpl" "$root/LICENSE"
 cp "$scriptdir/templates/TROUBLESHOOTING.tpl" "$root/TROUBLESHOOTING"
 
 echo "  * Adjusting shebangs"
-if [[ `uname` == "Darwin" ]]; tdhen
+if [[ `uname` == "Darwin" ]]; then
     LC_ALL=C find $env_root/ -type f -exec sed -i '' 's/#!\/.*\/ruby/#!\/usr\/bin\/env ruby/g' {} \;
 else
     find $env_root/ -type f -exec sed -i 's/#!\/.*\/ruby/#!\/usr\/bin\/env ruby/g' {} \;

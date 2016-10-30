@@ -73,32 +73,32 @@ for target in $targets; do
 done
 
 
-echo
-echo -n 'Removing PID files'
-rm *.pid
-echo ' - done.'
-echo
+# echo
+# echo -n 'Removing PID files'
+# rm *.pid
+# echo ' - done.'
+# echo
 
-echo 'Pushing to server, this can also take a while...'
+# echo 'Pushing to server, this can also take a while...'
 
-MAX_RETRIES=50
-i=0
+# MAX_RETRIES=50
+# i=0
  
-# Set the initial return value to failure
-false
+# # Set the initial return value to failure
+# false
  
-while [ $? -ne 0 -a $i -lt $MAX_RETRIES ]; do
-    sleep 5
+# while [ $? -ne 0 -a $i -lt $MAX_RETRIES ]; do
+#     sleep 5
 
-    i=$(($i+1))
-    rsync -v --archive --human-readable --progress --partial \
-        --executability --compress --stats --timeout=60 \
-        $(package_patterns) $(rsync_destination)
-done
+#     i=$(($i+1))
+#     rsync -v --archive --human-readable --progress --partial \
+#         --executability --compress --stats --timeout=60 \
+#         $(package_patterns) $(rsync_destination)
+# done
 
-if [ $i -eq $MAX_RETRIES ]; then
-    echo "Hit maximum number of retries, giving up."
-fi
+# if [ $i -eq $MAX_RETRIES ]; then
+#     echo "Hit maximum number of retries, giving up."
+# fi
 
 echo
 echo 'All done.'
