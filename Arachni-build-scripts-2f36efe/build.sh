@@ -764,6 +764,13 @@ install_arachni() {
     cp -R $root/../../arachni-ui-web $system_path/arachni-ui-web
     cd $system_path/arachni-ui-web
 
+
+    $usr_path/bin/gem sources --add http://gems.ruby-china.org/ --remove https://rubygems.org/ 
+
+    $gem_path/bin/bundle config mirror.https://rubygems.org http://gems.ruby-china.org
+
+    $usr_path/bin/gem sources -l
+
     echo "  * Installing"
 
     # Install the Rails bundle *with* binstubs because we'll need to symlink
