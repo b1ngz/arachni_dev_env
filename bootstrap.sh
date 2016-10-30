@@ -2,7 +2,7 @@
 #
 # Copyright 2010-2016 Tasos Laskos <tasos.laskos@arachni-scanner.com>
 
-build_script_tarball="https://github.com/b1ngz/arachni_dev_env/raw/master/Arachni-build-scripts-2f36efe.tar.gz"
+# build_script_tarball="https://github.com/b1ngz/arachni_dev_env/raw/master/Arachni-build-scripts-2f36efe.tar.gz"
 
 if [ -z "$ARACHNI_BUILD_DIR" ]; then
     build_dir="arachni-build-dir"
@@ -77,15 +77,21 @@ fi
 # rm $build_scripts_outfile
 
 
-rm -rf "$build_dir/Arachni-build-scripts-2f36efe"
-cp -R "$build_dir/../Arachni-build-scripts-2f36efe" $build_dir
 
+BUILD_SCRIPT="Arachni-build-scripts-2f36efe"
+
+if [[ -d "$BUILD_SCRIPT" ]]; then
+    rm -rf $BUILD_SCRIPT
+fi
+
+cp -R "../$BUILD_SCRIPT" $BUILD_SCRIPT
 
 if [[ -z "$1" ]]; then
     callback_script=Arachni-build-scripts-*/build.sh
 else
     callback_script=Arachni-build-scripts-*/$1.sh
 fi
+
 
 ls $callback_script 2>> /dev/null 1>> /dev/null
 if [[ $? != 0 ]]; then

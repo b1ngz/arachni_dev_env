@@ -370,7 +370,7 @@ handle_failure(){
 download() {
     echo -n "  * Downloading $1"
     echo -n " -  0% ETA:      -s"
-    proxychains4 wget -c --progress=dot --no-check-certificate $1 $2 2>&1 | \
+    wget -c --progress=dot --no-check-certificate $1 $2 2>&1 | \
         while read line; do
             echo $line | grep "%" | sed -e "s/\.//g" | \
             awk '{printf("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b%4s ETA: %6s", $2, $4)}'
@@ -470,7 +470,7 @@ download_and_install() {
     if [[ -f "$1" ]]; then
         rm $1
     fi
-    # cp ../../../../libs/$1 ./
+
     cp "$root/../../libs/$1" $archives_path
     extract_archive $name
     install_from_src $name
