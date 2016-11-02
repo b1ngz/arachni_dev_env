@@ -769,12 +769,12 @@ install_arachni() {
     cp -R $root/../../arachni-ui-web $system_path/arachni-ui-web
     cd $system_path/arachni-ui-web
 
-    # 因为拉取很慢，所以使用本地github的gem，只设置local
-    bundle config --local local.arachni-debug-rack $root/../../arachni-debug-rack
+    # # 因为拉取很慢，所以使用本地github的gem，只设置local
+    # bundle config --local local.arachni-debug-rack $root/../../arachni-debug-rack
 
-    bundle config --local local.arachni $root/../../arachni
+    # bundle config --local local.arachni $root/../../arachni
 
-    bundle config  
+    # bundle config  
 
     $usr_path/bin/gem sources --add http://gems.ruby-china.org/ --remove https://rubygems.org/ 
 
