@@ -676,14 +676,16 @@ prepare_ruby() {
 
     $usr_path/bin/gem sources --add http://gems.ruby-china.org/ --remove https://rubygems.org/ 
 
+    $usr_path/bin/gem sources --remove https://gems.ruby-china.org/
+
     $usr_path/bin/gem sources -l
 
     echo "  * Updating Rubygems"
-    $usr_path/bin/gem update --system 2>> "$logs_path/rubygems" 1>> "$logs_path/rubygems"
+    $usr_path/bin/gem update --system 2>&1 | tee -a "$logs_path/rubygems"
     handle_failure "rubygems"
 
     echo "  * Installing Bundler"
-    $usr_path/bin/gem install bundler --no-ri  --no-rdoc  2>> "$logs_path/bundler" 1>> "$logs_path/bundler"
+    $usr_path/bin/gem install bundler --no-ri  --no-rdoc 2>&1 | tee -a "$logs_path/bundler"
     handle_failure "bundler"
 }
 
@@ -786,22 +788,22 @@ install_arachni() {
 
     # Install the Rails bundle *with* binstubs because we'll need to symlink
     # them from the package executables under $root/bin/.
-    $gem_path/bin/bundle install --binstubs 2>> "$logs_path/arachni-ui-web" 1>> "$logs_path/arachni-ui-web"
+    $gem_path/bin/bundle install --binstubs 2>&1 | tee -a "$logs_path/arachni-ui-web"
     handle_failure "arachni-ui-web"
 
     # If we don't do this Rails 4 will keep printing annoying messages when using the runner
     # or console.
-    yes | $gem_path/bin/bundle exec $gem_path/bin/rake rails:update:bin 2>> "$logs_path/arachni-ui-web" 1>> "$logs_path/arachni-ui-web"
+    yes | $gem_path/bin/bundle exec $gem_path/bin/rake rails:update:bin 2>&1 | tee -a "$logs_path/arachni-ui-web"
     handle_failure "arachni-ui-web"
 
     echo "  * Precompiling assets"
-    $gem_path/bin/bundle exec $gem_path/bin/rake assets:precompile 2>> "$logs_path/arachni-ui-web" 1>> "$logs_path/arachni-ui-web"
+    $gem_path/bin/bundle exec $gem_path/bin/rake assets:precompile 2>&1 | tee -a "$logs_path/arachni-ui-web"
     handle_failure "arachni-ui-web"
 
     echo "  * Setting-up the database"
-    $gem_path/bin/bundle exec $gem_path/bin/rake db:migrate 2>> "$logs_path/arachni-ui-web" 1>> "$logs_path/arachni-ui-web"
+    $gem_path/bin/bundle exec $gem_path/bin/rake db:migrate 2>&1 | tee -a "$logs_path/arachni-ui-web"
     handle_failure "arachni-ui-web"
-    $gem_path/bin/bundle exec $gem_path/bin/rake db:setup 2>> "$logs_path/arachni-ui-web" 1>> "$logs_path/arachni-ui-web"
+    $gem_path/bin/bundle exec $gem_path/bin/rake db:setup 2>&1 | tee -a "$logs_path/arachni-ui-web"
     handle_failure "arachni-ui-web"
 
     echo "  * Writing full version to VERSION file"
