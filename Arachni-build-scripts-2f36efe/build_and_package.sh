@@ -64,7 +64,7 @@ pkg_name=$pkg_name_with_full_version
 archive="$pkg_name-`operating_system`-`architecture`.tar.gz"
 
 echo "  * Compressing build dir ($pkg_name)"
-tar czf $archive -C `dirname $(readlink_f $pkg_name )` $pkg_name
+tar czf $archive -C --exclude .git `dirname $(readlink_f $pkg_name )` $pkg_name
 
 shasum $archive | awk '{ print $1 }' > "$archive.sha1"
 
